@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", () => {
+                const app = new Vue({
+                    el: '#app',
+                    data: {
+                        initialSave: '',
+                        initialRisk: '',
+                        years: '',
+                        yearsToCome: '',
+                        interestSave: '',
+                        interestRisk: '',
+                        saveSavement: '',
+                        riskSavement: '',
+                        showResult: false,
+                        resultYears: []
+                    },
+                    methods: {
+                        calculate: function() {
+                            this.resultYears = [];
+                            
+                            const factorSave = this.interestSave / 100;
+                            const factorRisk = this.interestRisk / 100;
+                            
+                            let sumSaveWithInterest = this.initialSave;
+                            let sumRiskWithInterest = this.initialRisk;
+                            
+                            let sumSave = this.initialSave;
+                            let sumRisk = this.initialRisk;
+                            
+                            for (let i=1; i<=this.years; i++) {
+                                const interestSave = this.saveSavement * factorSave + sumSaveWithInterest * factorSave;
+                                const interestRisk = this.riskSavement * factorRisk + sumRiskWithInterest * factorRisk;
+                                
+                                const interest = interestSave + interestRisk;
+                                
+                                sumSaveWithInterest += this.saveSavement + interestSave;
+                                sumRiskWithInterest += this.riskSavement + interestRisk;
+                                
+                                sumSave += this.saveSavement;
+                                sumRisk += this.riskSavement;
+                                
+                                const result = sumSaveWithInterest + sumRiskWithInterest;
+                                
+                                this.resultYears.push({
+                                    number: i,
+                                    sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
+                                    sumRisk: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRisk * 100) / 100),
+                                    sum: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt((sumSave + sumRisk) * 100) / 100),
+                                    interest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(interest * 100) / 100),
+                                    sumSaveWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSaveWithInterest * 100) / 100),
+                                    sumRiskWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRiskWithInterest * 100) / 100),
+                                    result: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100)
+                                });
+                            }
+                            
+                            // const resultPerMonth = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(((result / yearsToCome) / 12) * 100) / 100);
+                            // const resultText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100) + '<br />' + resultPerMonth;
+                            
+                            this.showResult = true;
+                        },
+                        clear: function() {
+                            this.showResult = false;
+                            this.resultYears = [];
+                        }
+                    }
+                });
+            });
+        </script>
+        
+        <style>
+            .hero.is-primary {
+                background-color: #3273DC;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Finanzen
+                    </h1>
+                </div>
+            </div>
+        </section>
+        <div id="app" class="section">
+            <div class="container">
+                <form @submit.prevent="calculate">
+                    <div class="field">
+                        <label for="initialSave" class="label">Initialer Start (Save)</label>
+                        <div class="control">
+                            <input id="initialSave" type="text" class="input" name="initialSave" required v-model.number="initialSave" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="initialRisk" class="label">Initialer Start (Risk)</label>
+                        <div class="control">
+                            <input id="initialRisk" type="text" class="input" name="initialRisk" required v-model.number="initialRisk" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="saveSavement" class="label">Jährlicher sicherer Betrag</label>
+                        <div class="control">
+                            <input id="saveSavement" type="text" class="input" name="saveSavement" required v-model.number="saveSavement" />
+                            <input id="interestSave" type="text" class="input" name="interestSave" required v-model.number="interestSave" placeholder="Zinsen" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="riskSavement" class="label">Jährlicher riskanter Betrag</label>
+                        <div class="control">
+                            <input id="riskSavement" type="text" class="input" name="riskSavement" required v-model.number="riskSavement" />
+                            <input id="interestRisk" type="text" class="input" name="interestRisk" required v-model.number="interestRisk" placeholder="Zinsen" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="years" class="label">Jahre</label>
+                        <div class="control">
+                            <input id="years" type="text" class="input" name="years" required v-model.number="years" />
+                        </div>
+                    </div>
+                    <!-- <div class="field">
+                        <label for="yearsToCome" class="label">Jahre die noch kommen</label>
+                        <div class="control">
+                            <input id="yearsToCome" type="text" class="input" name="yearsToCome" required v-model.number="yearsToCome" />
+                        </div>
+                    </div> -->
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input type="submit" class="button is-link" value="Calculate" />
+                        </div>
+                        <!-- <div class="control">
+                            <button @click="clear" class="button is-text">Clear</button>
+                        </div> -->
+                    </div>
+                </form>
+            </div>
+            <div class="container" v-if="showResult">
+                <table class="table" border="1">
+                    <thead>
+                        <tr>
+                            <th>Jahr</th>
+                            <th>Sicherer Teil des Vermögens ohne Zinsen</th>
+                            <th>Riskanter Teil des Vermögens ohne Zinsen</th>
+                            <th>Gesamtvermögen ohne Zinsen</th>
+                            <th>Zinsen</th>
+                            <th>Sicherer Teil des Vermögens mit Zinsen</th>
+                            <th>Riskanter Teil des Vermögens mit Zinsen</th>
+                            <th>Gesamtvermögen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="resultYear in resultYears">
+                            <td>{{ resultYear.number }}</td>
+                            <td>{{ resultYear.sumSave }}</td>
+                            <td>{{ resultYear.sumRisk }}</td>
+                            <td>{{ resultYear.sum }}</td>
+                            <td>{{ resultYear.interest }}</td>
+                            <td>{{ resultYear.sumSaveWithInterest }}</td>
+                            <td>{{ resultYear.sumRiskWithInterest }}</td>
+                            <td>{{ resultYear.result }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
