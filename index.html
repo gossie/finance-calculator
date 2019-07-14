@@ -9,6 +9,60 @@
         
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
+                Vue.component('finance-field', {
+                    props: ['fieldid', 'label'],
+                    data: function() {
+                        return {
+                            value: ''
+                        }
+                    },
+                    methods: {
+                        onValueChange: function() {
+                            this.$emit('value-changed', {
+                                fieldId: this.fieldid,
+                                value: this.value
+                            });
+                        }
+                    },
+                    template: `<div class="field">
+                                   <label :for="fieldid" class="label">{{ label }}</label>
+                                   <div class="control">
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                   </div>
+                               </div>`
+                });
+                
+                Vue.component('finance-field-with-interests', {
+                    props: ['fieldid', 'label'],
+                    data: function() {
+                        return {
+                            value: '',
+                            interests: ''
+                        }
+                    },
+                    methods: {
+                        onValueChange: function() {
+                            this.$emit('value-changed', {
+                                fieldId: this.fieldid,
+                                value: this.value
+                            });
+                        },
+                        onInterestsChange: function() {
+                            this.$emit('interests-changed', {
+                                fieldId: this.fieldid,
+                                value: this.interests
+                            });
+                        }
+                    },
+                    template: `<div class="field">
+                                   <label :for="fieldid" class="label">{{ label }}</label>
+                                   <div class="control">
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                       <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Zinsen" @change="onInterestsChange" />
+                                   </div>
+                               </div>`
+                });
+                
                 const app = new Vue({
                     el: '#app',
                     data: {
@@ -20,12 +74,11 @@
                         interestRisk: '',
                         saveSavement: '',
                         riskSavement: '',
-                        showResult: false,
-                        resultYears: []
+                        showResult: false
                     },
-                    methods: {
-                        calculate: function() {
-                            this.resultYears = [];
+                    computed: {
+                        resultYears: function() {
+                            const resultYears = [];
                             
                             const factorSave = this.interestSave / 100;
                             const factorRisk = this.interestRisk / 100;
@@ -50,7 +103,7 @@
                                 
                                 const result = sumSaveWithInterest + sumRiskWithInterest;
                                 
-                                this.resultYears.push({
+                                resultYears.push({
                                     number: i,
                                     sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
                                     sumRisk: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRisk * 100) / 100),
@@ -61,15 +114,25 @@
                                     result: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100)
                                 });
                             }
-                            
-                            // const resultPerMonth = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(((result / yearsToCome) / 12) * 100) / 100);
-                            // const resultText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100) + '<br />' + resultPerMonth;
-                            
+                            return resultYears;
+                        }
+                    },
+                    methods: {
+                        onValueChange: function(event) {
+                            this[event.fieldId] = event.value;
+                        },
+                        onInterestsChange: function(event) {
+                            if (event.fieldId.startsWith('save')) {
+                                this.interestSave = event.value;
+                            } else {
+                                this.interestRisk = event.value;
+                            }
+                        },
+                        calculate: function() {
                             this.showResult = true;
                         },
                         clear: function() {
                             this.showResult = false;
-                            this.resultYears = [];
                         }
                     }
                 });
@@ -95,44 +158,12 @@
         <div id="app" class="section">
             <div class="container">
                 <form @submit.prevent="calculate">
-                    <div class="field">
-                        <label for="initialSave" class="label">Initialer Start (Save)</label>
-                        <div class="control">
-                            <input id="initialSave" type="text" class="input" name="initialSave" required v-model.number="initialSave" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="initialRisk" class="label">Initialer Start (Risk)</label>
-                        <div class="control">
-                            <input id="initialRisk" type="text" class="input" name="initialRisk" required v-model.number="initialRisk" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="saveSavement" class="label">Jährlicher sicherer Betrag</label>
-                        <div class="control">
-                            <input id="saveSavement" type="text" class="input" name="saveSavement" required v-model.number="saveSavement" />
-                            <input id="interestSave" type="text" class="input" name="interestSave" required v-model.number="interestSave" placeholder="Zinsen" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="riskSavement" class="label">Jährlicher riskanter Betrag</label>
-                        <div class="control">
-                            <input id="riskSavement" type="text" class="input" name="riskSavement" required v-model.number="riskSavement" />
-                            <input id="interestRisk" type="text" class="input" name="interestRisk" required v-model.number="interestRisk" placeholder="Zinsen" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="years" class="label">Jahre</label>
-                        <div class="control">
-                            <input id="years" type="text" class="input" name="years" required v-model.number="years" />
-                        </div>
-                    </div>
-                    <!-- <div class="field">
-                        <label for="yearsToCome" class="label">Jahre die noch kommen</label>
-                        <div class="control">
-                            <input id="yearsToCome" type="text" class="input" name="yearsToCome" required v-model.number="yearsToCome" />
-                        </div>
-                    </div> -->
+                    <finance-field fieldid="initialSave" label="Initialer Start (Save)" @value-changed="onValueChange"></finance-field>
+                    <finance-field fieldid="initialRisk" label="Initialer Start (Risk)" @value-changed="onValueChange"></finance-field>
+                    <finance-field-with-interests fieldid="saveSavement" label="Jährlicher sicherer Betrag" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field-with-interests fieldid="riskSavement" label="Jährlicher riskanter Betrag" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field fieldid="years" label="Jahre" @value-changed="onValueChange"></finance-field>
+                    <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
                     <div class="field is-grouped">
                         <div class="control">
                             <input type="submit" class="button is-link" value="Calculate" />
