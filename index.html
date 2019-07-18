@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", () => {
+                Vue.component('finance-field', {
+                    props: ['fieldid', 'label'],
+                    data: function() {
+                        return {
+                            value: ''
+                        }
+                    },
+                    methods: {
+                        onValueChange: function() {
+                            this.$emit('value-changed', {
+                                fieldId: this.fieldid,
+                                value: this.value
+                            });
+                        }
+                    },
+                    template: `<div class="field">
+                                   <label :for="fieldid" class="label">{{ label }}</label>
+                                   <div class="control">
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                   </div>
+                               </div>`
+                });
+                
+                Vue.component('finance-field-with-interests', {
+                    props: ['fieldid', 'label'],
+                    data: function() {
+                        return {
+                            value: '',
+                            interests: ''
+                        }
+                    },
+                    methods: {
+                        onValueChange: function() {
+                            this.$emit('value-changed', {
+                                fieldId: this.fieldid,
+                                value: this.value
+                            });
+                        },
+                        onInterestsChange: function() {
+                            this.$emit('interests-changed', {
+                                fieldId: this.fieldid,
+                                value: this.interests
+                            });
+                        }
+                    },
+                    template: `<div class="field">
+                                   <label :for="fieldid" class="label">{{ label }}</label>
+                                   <div class="control">
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                       <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
+                                   </div>
+                               </div>`
+                });
+                
+                const app = new Vue({
+                    el: '#app',
+                    data: {
+                        initialSave: '',
+                        initialRisk: '',
+                        years: '',
+                        yearsToCome: '',
+                        interestSave: '',
+                        interestRisk: '',
+                        saveSavement: '',
+                        riskSavement: '',
+                        showResult: false
+                    },
+                    computed: {
+                        resultYears: function() {
+                            const resultYears = [];
+                            
+                            const factorSave = this.interestSave / 100;
+                            const factorRisk = this.interestRisk / 100;
+                            
+                            let sumSaveWithInterest = this.initialSave;
+                            let sumRiskWithInterest = this.initialRisk;
+                            
+                            let sumSave = this.initialSave;
+                            let sumRisk = this.initialRisk;
+                            
+                            for (let i=1; i<=this.years; i++) {
+                                const interestSave = this.saveSavement * factorSave + sumSaveWithInterest * factorSave;
+                                const interestRisk = this.riskSavement * factorRisk + sumRiskWithInterest * factorRisk;
+                                
+                                const interest = interestSave + interestRisk;
+                                
+                                sumSaveWithInterest += this.saveSavement + interestSave;
+                                sumRiskWithInterest += this.riskSavement + interestRisk;
+                                
+                                sumSave += this.saveSavement;
+                                sumRisk += this.riskSavement;
+                                
+                                const result = sumSaveWithInterest + sumRiskWithInterest;
+                                
+                                resultYears.push({
+                                    number: i,
+                                    sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
+                                    sumRisk: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRisk * 100) / 100),
+                                    sum: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt((sumSave + sumRisk) * 100) / 100),
+                                    interest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(interest * 100) / 100),
+                                    sumSaveWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSaveWithInterest * 100) / 100),
+                                    sumRiskWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRiskWithInterest * 100) / 100),
+                                    result: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100)
+                                });
+                            }
+                            return resultYears;
+                        }
+                    },
+                    methods: {
+                        onValueChange: function(event) {
+                            this[event.fieldId] = event.value;
+                        },
+                        onInterestsChange: function(event) {
+                            if (event.fieldId.startsWith('save')) {
+                                this.interestSave = event.value;
+                            } else {
+                                this.interestRisk = event.value;
+                            }
+                        },
+                        calculate: function() {
+                            this.showResult = true;
+                        },
+                        clear: function() {
+                            this.showResult = false;
+                        }
+                    }
+                });
+            });
+        </script>
+        
+        <style>
+            .hero.is-primary {
+                background-color: #3273DC;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Finance calculator
+                    </h1>
+                </div>
+            </div>
+        </section>
+        <div id="app" class="section">
+            <div class="container">
+                <form @submit.prevent="calculate">
+                    <finance-field fieldid="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
+                    <finance-field fieldid="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
+                    <finance-field-with-interests fieldid="saveSavement" label="Yearly savement (save)" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field-with-interests fieldid="riskSavement" label="Yearly savement (Risk)" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
+                    <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input type="submit" class="button is-link" value="Calculate" />
+                        </div>
+                        <!-- <div class="control">
+                            <button @click="clear" class="button is-text">Clear</button>
+                        </div> -->
+                    </div>
+                </form>
+            </div>
+            <div class="container" v-if="showResult">
+                <table class="table" border="1">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Save part of the fortune without interests</th>
+                            <th>Risky part of the fortune without interests</th>
+                            <th>Total fortune without interests</th>
+                            <th>interestSave</th>
+                            <th>save part of the fortune with interests</th>
+                            <th>Risky part of the fortune with interests</th>
+                            <th>Total fortune</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="resultYear in resultYears">
+                            <td>{{ resultYear.number }}</td>
+                            <td>{{ resultYear.sumSave }}</td>
+                            <td>{{ resultYear.sumRisk }}</td>
+                            <td>{{ resultYear.sum }}</td>
+                            <td>{{ resultYear.interest }}</td>
+                            <td>{{ resultYear.sumSaveWithInterest }}</td>
+                            <td>{{ resultYear.sumRiskWithInterest }}</td>
+                            <td>{{ resultYear.result }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
