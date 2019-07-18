@@ -58,7 +58,7 @@
                                    <label :for="fieldid" class="label">{{ label }}</label>
                                    <div class="control">
                                        <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
-                                       <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Zinsen" @change="onInterestsChange" />
+                                       <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
                                    </div>
                                </div>`
                 });
@@ -150,7 +150,7 @@
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
-                        Finanzen
+                        Finance calculator
                     </h1>
                 </div>
             </div>
@@ -158,11 +158,11 @@
         <div id="app" class="section">
             <div class="container">
                 <form @submit.prevent="calculate">
-                    <finance-field fieldid="initialSave" label="Initialer Start (Save)" @value-changed="onValueChange"></finance-field>
-                    <finance-field fieldid="initialRisk" label="Initialer Start (Risk)" @value-changed="onValueChange"></finance-field>
-                    <finance-field-with-interests fieldid="saveSavement" label="Jährlicher sicherer Betrag" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field-with-interests fieldid="riskSavement" label="Jährlicher riskanter Betrag" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field fieldid="years" label="Jahre" @value-changed="onValueChange"></finance-field>
+                    <finance-field fieldid="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
+                    <finance-field fieldid="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
+                    <finance-field-with-interests fieldid="saveSavement" label="Yearly savement (save)" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field-with-interests fieldid="riskSavement" label="Yearly savement (Risk)" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
                     <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
                     <div class="field is-grouped">
                         <div class="control">
@@ -178,14 +178,14 @@
                 <table class="table" border="1">
                     <thead>
                         <tr>
-                            <th>Jahr</th>
-                            <th>Sicherer Teil des Vermögens ohne Zinsen</th>
-                            <th>Riskanter Teil des Vermögens ohne Zinsen</th>
-                            <th>Gesamtvermögen ohne Zinsen</th>
-                            <th>Zinsen</th>
-                            <th>Sicherer Teil des Vermögens mit Zinsen</th>
-                            <th>Riskanter Teil des Vermögens mit Zinsen</th>
-                            <th>Gesamtvermögen</th>
+                            <th>Year</th>
+                            <th>Save part of the fortune without interests</th>
+                            <th>Risky part of the fortune without interests</th>
+                            <th>Total fortune without interests</th>
+                            <th>interestSave</th>
+                            <th>save part of the fortune with interests</th>
+                            <th>Risky part of the fortune with interests</th>
+                            <th>Total fortune</th>
                         </tr>
                     </thead>
                     <tbody>
