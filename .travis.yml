@@ -3,6 +3,5 @@ deploy:
     skip-cleanup: true
     github-token: $FINANCE_CALCULATOR_GITHUB_TOKEN
     keep-history: true
-    local-dir: src
     on:
         branch: master
