@@ -35,6 +35,11 @@
                 Vue.component('finance-field-with-interests', {
                     props: ['fieldid', 'label', 'defaultinterests'],
                     data: function() {
+                        this.$emit('interests-changed', {
+                            fieldId: this.fieldid,
+                            value: this.defaultinterests
+                        });
+                        
                         return {
                             value: '',
                             interests: this.defaultinterests
@@ -55,7 +60,7 @@
                         }
                     },
                     template: `<div class="field">
-                                   <label :for="fieldid" class="label">{{ label }} {{ defaultinterests }} {{ interests }}</label>
+                                   <label :for="fieldid" class="label">{{ label }}</label>
                                    <div class="control">
                                        <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
                                        <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
