@@ -208,56 +208,68 @@
                                 <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
                             </div>
                         </div>
-                    </div>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <input type="submit" class="button is-link" value="Calculate" />
+                        <div class="tile is-parent">
+                            <div class="tile is-parent">
+                                <div class="tile is-child">
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <input type="submit" class="button is-link" value="Calculate" />
+                                        </div>
+                                        <!-- <div class="control">
+                                            <button @click="clear" class="button is-text">Clear</button>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!-- <div class="control">
-                            <button @click="clear" class="button is-text">Clear</button>
-                        </div> -->
+                        
+                        <div class="tile is-parent" v-if="showResult">
+                            <div class="tile is-parent">
+                                <div class="tile is-child">
+                        
+                                    <table class="table box" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Year</th>
+                                                <th>Save part of the fortune without interests</th>
+                                                <th>Risky part of the fortune without interests</th>
+                                                <th>Total fortune without interests</th>
+                                                <th>Interests</th>
+                                                <th>save part of the fortune with interests</th>
+                                                <th>Risky part of the fortune with interests</th>
+                                                <th>Total fortune</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="resultYear in resultYears">
+                                                <td>{{ resultYear.number }}</td>
+                                                <td>{{ resultYear.sumSave }}</td>
+                                                <td>{{ resultYear.sumRisk }}</td>
+                                                <td>{{ resultYear.sum }}</td>
+                                                <td>{{ resultYear.interest }}</td>
+                                                <td>{{ resultYear.sumSaveWithInterest }}</td>
+                                                <td>{{ resultYear.sumRiskWithInterest }}</td>
+                                                <td>{{ resultYear.result }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><b>{{ totalInterests }}</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
-            </div>
-            <div class="container" v-if="showResult">
-                <table class="table" border="1">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Save part of the fortune without interests</th>
-                            <th>Risky part of the fortune without interests</th>
-                            <th>Total fortune without interests</th>
-                            <th>Interests</th>
-                            <th>save part of the fortune with interests</th>
-                            <th>Risky part of the fortune with interests</th>
-                            <th>Total fortune</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="resultYear in resultYears">
-                            <td>{{ resultYear.number }}</td>
-                            <td>{{ resultYear.sumSave }}</td>
-                            <td>{{ resultYear.sumRisk }}</td>
-                            <td>{{ resultYear.sum }}</td>
-                            <td>{{ resultYear.interest }}</td>
-                            <td>{{ resultYear.sumSaveWithInterest }}</td>
-                            <td>{{ resultYear.sumRiskWithInterest }}</td>
-                            <td>{{ resultYear.result }}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><b>{{ totalInterests }}</b></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
             </div>
         </div>
     </body>
