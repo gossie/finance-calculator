@@ -10,7 +10,7 @@
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
                 Vue.component('finance-field', {
-                    props: ['fieldId', 'label'],
+                    props: ['fieldid', 'label'],
                     data: function() {
                         return {
                             value: ''
@@ -19,21 +19,21 @@
                     methods: {
                         onValueChange: function() {
                             this.$emit('value-changed', {
-                                fieldId: this.fieldId,
+                                fieldId: this.fieldid,
                                 value: this.value
                             });
                         }
                     },
                     template: `<div class="field">
-                                   <label :for="fieldId" class="label">{{ label }}</label>
+                                   <label :for="fieldid" class="label">{{ label }}</label>
                                    <div class="control">
-                                       <input :id="fieldId" type="text" class="input" :name="fieldId" required v-model.number="value" @change="onValueChange" />
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
                                    </div>
                                </div>`
                 });
                 
                 Vue.component('finance-field-with-interests', {
-                    props: ['fieldId', 'label', 'defaultInterests'],
+                    props: ['fieldid', 'label', 'defaultInterests'],
                     data: function() {
                         return {
                             value: '',
@@ -43,21 +43,21 @@
                     methods: {
                         onValueChange: function() {
                             this.$emit('value-changed', {
-                                fieldId: this.fieldId,
+                                fieldId: this.fieldid,
                                 value: this.value
                             });
                         },
                         onInterestsChange: function() {
                             this.$emit('interests-changed', {
-                                fieldId: this.fieldId,
+                                fieldId: this.fieldid,
                                 value: this.interests
                             });
                         }
                     },
                     template: `<div class="field">
-                                   <label :for="fieldId" class="label">{{ label }}</label>
+                                   <label :for="fieldid" class="label">{{ label }} {{ defaultInterests }} {{ interests }}</label>
                                    <div class="control">
-                                       <input :id="fieldId" type="text" class="input" :name="fieldId" required v-model.number="value" @change="onValueChange" />
+                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
                                        <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
                                    </div>
                                </div>`
@@ -165,12 +165,12 @@
         <div id="app" class="section">
             <div class="container">
                 <form @submit.prevent="calculate">
-                    <finance-field fieldId="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
-                    <finance-field fieldId="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
-                    <finance-field-with-interests fieldId="saveSavement" label="Yearly savement (save)" defaultInterests="0.2" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field-with-interests fieldId="riskSavement" label="Yearly savement (Risk)" defaultInterests="5" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field fieldId="years" label="Years" @value-changed="onValueChange"></finance-field>
-                    <!-- <finance-field fieldId="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
+                    <finance-field fieldid="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
+                    <finance-field fieldid="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
+                    <finance-field-with-interests fieldid="saveSavement" label="Yearly savement (save)" defaultInterests="0.2" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field-with-interests fieldid="riskSavement" label="Yearly savement (Risk)" defaultInterests="5" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                    <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
+                    <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
                     <div class="field is-grouped">
                         <div class="control">
                             <input type="submit" class="button is-link" value="Calculate" />
