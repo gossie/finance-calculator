@@ -29,10 +29,12 @@
                             });
                         }
                     },
-                    template: `<div class="field">
-                                   <label :for="fieldid" class="label">{{ label }}</label>
-                                   <div class="control">
-                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                    template: `<div class="tile is-child box">
+                                   <div class="field">
+                                       <label :for="fieldid" class="label">{{ label }}</label>
+                                       <div class="control">
+                                           <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                       </div>
                                    </div>
                                </div>`
                 });
@@ -68,11 +70,13 @@
                             });
                         }
                     },
-                    template: `<div class="field">
-                                   <label :for="fieldid" class="label">{{ label }}</label>
-                                   <div class="control">
-                                       <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
-                                       <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
+                    template: `<div class="tile is-child box">
+                                   <div class="field">
+                                       <label :for="fieldid" class="label">{{ label }}</label>
+                                       <div class="control">
+                                           <input :id="fieldid" type="text" class="input" :name="fieldid" required v-model.number="value" @change="onValueChange" />
+                                           <input id="interests" type="text" class="input" name="interests" required v-model.number="interests" placeholder="Interests" @change="onInterestsChange" />
+                                       </div>
                                    </div>
                                </div>`
                 });
@@ -179,12 +183,32 @@
         <div id="app" class="section">
             <div class="container">
                 <form @submit.prevent="calculate">
-                    <finance-field fieldid="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
-                    <finance-field fieldid="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
-                    <finance-field-with-interests fieldid="saveSavement" label="Yearly savement (save)" defaultinterests="0.2" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field-with-interests fieldid="riskSavement" label="Yearly savement (Risk)" defaultinterests="5" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
-                    <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
-                    <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
+                    <div class="tile is-ancestor  is-vertical">
+                        <div class="tile is-parent">
+                            <div class="tile is-parent">
+                                <finance-field fieldid="initialSave" label="Initial fortune (Save)" @value-changed="onValueChange"></finance-field>
+                            </div>
+                            <div class="tile is-parent">
+                                <finance-field fieldid="initialRisk" label="Initial fortune (Risk)" @value-changed="onValueChange"></finance-field>
+                            </div>
+                        </div>
+                        <div class="tile is-parent">
+                            <div class="tile is-parent">
+                                <finance-field-with-interests fieldid="saveSavement" label="Yearly savement (save)" defaultinterests="0.2" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                            </div>
+                            <div class="tile is-parent">
+                                <finance-field-with-interests fieldid="riskSavement" label="Yearly savement (Risk)" defaultinterests="5" @value-changed="onValueChange" @interests-changed="onInterestsChange"></finance-field-with-interests>
+                            </div>
+                        </div>
+                        <div class="tile is-parent">
+                            <div class="tile is-parent">
+                                <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
+                            </div>
+                            <div class="tile is-parent">
+                                <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
+                            </div>
+                        </div>
+                    </div>
                     <div class="field is-grouped">
                         <div class="control">
                             <input type="submit" class="button is-link" value="Calculate" />
