@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
+
         <title>Finance Calculator</title>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-        
+
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
                 Vue.component('finance-field', {
@@ -19,7 +19,7 @@
                     },
                     data: function() {
                         return {
-                            value: ''
+                            value: 0
                         }
                     },
                     methods: {
@@ -39,7 +39,7 @@
                                    </div>
                                </div>`
                 });
-                
+
                 Vue.component('finance-field-with-interests', {
                     props: {
                         fieldid: String,
@@ -51,9 +51,9 @@
                             fieldId: this.fieldid,
                             value: this.defaultinterests
                         });
-                        
+
                         return {
-                            value: '',
+                            value: 0,
                             interests: this.defaultinterests
                         }
                     },
@@ -81,47 +81,47 @@
                                    </div>
                                </div>`
                 });
-                
+
                 const app = new Vue({
                     el: '#app',
                     data: {
-                        initialSave: '',
-                        initialRisk: '',
-                        years: '',
-                        yearsToCome: '',
-                        interestSave: '',
-                        interestRisk: '',
-                        saveSavement: '',
-                        riskSavement: '',
+                        initialSave: 0,
+                        initialRisk: 0,
+                        years: 0,
+                        yearsToCome: 0,
+                        interestSave: 0,
+                        interestRisk: 0,
+                        saveSavement: 0,
+                        riskSavement: 0,
                         showResult: false
                     },
                     computed: {
                         resultYears: function() {
                             const resultYears = [];
-                            
+
                             const factorSave = this.interestSave / 100;
                             const factorRisk = this.interestRisk / 100;
-                            
+
                             let sumSaveWithInterest = this.initialSave;
                             let sumRiskWithInterest = this.initialRisk;
-                            
+
                             let sumSave = this.initialSave;
                             let sumRisk = this.initialRisk;
-                            
+
                             for (let i=1; i<=this.years; i++) {
                                 const interestSave = this.saveSavement * factorSave + sumSaveWithInterest * factorSave;
                                 const interestRisk = this.riskSavement * factorRisk + sumRiskWithInterest * factorRisk;
-                                
+
                                 const interest = interestSave + interestRisk;
-                                
+
                                 sumSaveWithInterest += this.saveSavement + interestSave;
                                 sumRiskWithInterest += this.riskSavement + interestRisk;
-                                
+
                                 sumSave += this.saveSavement;
                                 sumRisk += this.riskSavement;
-                                
+
                                 const result = sumSaveWithInterest + sumRiskWithInterest;
-                                
+
                                 resultYears.push({
                                     number: i,
                                     sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
@@ -131,6 +131,7 @@
                                     interest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(interest * 100) / 100),
                                     sumSaveWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSaveWithInterest * 100) / 100),
                                     sumRiskWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRiskWithInterest * 100) / 100),
+                                    resultRaw: result,
                                     result: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100)
                                 });
                             }
@@ -139,8 +140,16 @@
                         totalInterests: function() {
                             const sum = this.resultYears
                                 .map(year => year.interestRaw)
-                                .reduce((accumulator, currentValue) => accumulator + currentValue)
+                                .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
                             return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sum * 100) / 100);
+                        },
+                        perYear: function() {
+                            const value = this.resultYears[this.resultYears.length-1].resultRaw / this.yearsToCome;
+                            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(value * 100) / 100);
+                        },
+                        perMonth: function() {
+                            const value = (this.resultYears[this.resultYears.length-1].resultRaw / this.yearsToCome) / 12;
+                            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(value * 100) / 100);
                         }
                     },
                     methods: {
@@ -164,7 +173,7 @@
                 });
             });
         </script>
-        
+
         <style>
             .hero.is-primary {
                 background-color: #3273DC;
@@ -206,7 +215,7 @@
                                 <finance-field fieldid="years" label="Years" @value-changed="onValueChange"></finance-field>
                             </div>
                             <div class="tile is-parent">
-                                <!-- <finance-field fieldid="yearsToCome" label="Jahre die noch kommen" @value-changed="onValueChange"></finance-field> -->
+                                <finance-field fieldid="yearsToCome" label="Years to come" @value-changed="onValueChange"></finance-field>
                             </div>
                         </div>
                         <div class="tile is-parent">
@@ -223,7 +232,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="tile is-parent" v-if="showResult">
                             <div class="tile is-parent">
                                 <div class="tile is-child box table-container">
@@ -265,6 +274,15 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tile is-parent" v-if="showResult && yearsToCome > 0">
+                            <div class="tile is-parent">
+                                <div class="tile is-child box table-container">
+                                    <p>Per year: {{ perYear }}</p>
+                                    <p>Per month: {{ perMonth }}</p>
                                 </div>
                             </div>
                         </div>
