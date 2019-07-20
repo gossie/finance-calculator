@@ -10,7 +10,10 @@
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
                 Vue.component('finance-field', {
-                    props: ['fieldid', 'label'],
+                    props: {
+                        fieldid: String,
+                        label: String
+                    },
                     data: function() {
                         return {
                             value: ''
@@ -33,7 +36,11 @@
                 });
                 
                 Vue.component('finance-field-with-interests', {
-                    props: ['fieldid', 'label', 'defaultinterests'],
+                    props: {
+                        fieldid: String,
+                        label: String,
+                        defaultinterests: Number
+                    },
                     data: function() {
                         this.$emit('interests-changed', {
                             fieldId: this.fieldid,
