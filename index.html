@@ -108,6 +108,7 @@
                                     sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
                                     sumRisk: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRisk * 100) / 100),
                                     sum: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt((sumSave + sumRisk) * 100) / 100),
+                                    interestRaw: interest,
                                     interest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(interest * 100) / 100),
                                     sumSaveWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSaveWithInterest * 100) / 100),
                                     sumRiskWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRiskWithInterest * 100) / 100),
@@ -115,6 +116,12 @@
                                 });
                             }
                             return resultYears;
+                        },
+                        totalInterests: function() {
+                            const sum = this.resultYears
+                                .map(year => year.interestRaw)
+                                .reduce((accumulator, currentValue) => accumulator + currentValue)
+                            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sum * 100) / 100);
                         }
                     },
                     methods: {
@@ -200,6 +207,18 @@
                             <td>{{ resultYear.result }}</td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{ totalInterests }}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
