@@ -1,9 +1,17 @@
-language: generic
+dist: trusty
+sudo: required
+language: node_js
+addons:
+  chrome: stable
+node_js:
+  - "node"
+script:
+  - npm run build
 deploy:
     provider: pages
     skip-cleanup: true
     github-token: $FINANCE_CALCULATOR_GITHUB_TOKEN
     keep-history: true
-    local-dir: src
+    local-dir: dist
     on:
         branch: master
