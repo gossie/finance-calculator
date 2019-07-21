@@ -3,13 +3,14 @@
         <div class="field">
             <label :for="fieldid" class="label">{{ label }}</label>
             <div class="control">
-                <input :id="fieldid"
-                       type="text"
-                       class="input"
-                       :name="fieldid"
-                       required
-                       v-model.number="value"
-                       @change="onValueChange" />
+                <input
+                    :id="fieldid"
+                    type="text"
+                    class="input"
+                    :name="fieldid"
+                    required
+                    v-model.number="value"
+                    @change="onValueChange" />
             </div>
         </div>
     </div>

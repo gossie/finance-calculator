@@ -3,21 +3,23 @@
         <div class="field">
             <label :for="fieldid" class="label">{{ label }}</label>
             <div class="control">
-                <input :id="fieldid"
-                       type="text"
-                       class="input"
-                       :name="fieldid"
-                       required
-                       v-model.number="value"
-                       @change="onValueChange" />
-                <input id="interests"
-                       type="text"
-                       class="input"
-                       name="interests"
-                       required
-                       v-model.number="interests"
-                       placeholder="Interests"
-                       @change="onInterestsChange" />
+                <input
+                    :id="fieldid"
+                    type="text"
+                    class="input"
+                    :name="fieldid"
+                    required
+                    v-model.number="value"
+                    @change="onValueChange" />
+                <input
+                    id="interests"
+                    type="text"
+                    class="input"
+                    name="interests"
+                    required
+                    v-model.number="interests"
+                    placeholder="Interests"
+                    @change="onInterestsChange" />
             </div>
         </div>
     </div>
