@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: "fincance-calculator"
+    publicPath: "finance-calculator"
 };
