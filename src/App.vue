@@ -7,14 +7,16 @@
                         <finance-field
                             fieldid="initialSave"
                             label="Initial fortune (Save)"
-                            @value-changed="onValueChange">
+                            @value-changed="onValueChange"
+                        >
                         </finance-field>
                     </div>
                     <div class="tile is-parent">
                         <finance-field
                             fieldid="initialRisk"
                             label="Initial fortune (Risk)"
-                            @value-changed="onValueChange">
+                            @value-changed="onValueChange"
+                        >
                         </finance-field>
                     </div>
                 </div>
@@ -25,7 +27,8 @@
                             label="Yearly savement (save)"
                             defaultinterests="0.2"
                             @value-changed="onValueChange"
-                            @interests-changed="onInterestsChange">
+                            @interests-changed="onInterestsChange"
+                        >
                         </finance-field-with-interests>
                     </div>
                     <div class="tile is-parent">
@@ -34,7 +37,8 @@
                             label="Yearly savement (Risk)"
                             defaultinterests="5"
                             @value-changed="onValueChange"
-                            @interests-changed="onInterestsChange">
+                            @interests-changed="onInterestsChange"
+                        >
                         </finance-field-with-interests>
                     </div>
                 </div>
@@ -43,14 +47,16 @@
                         <finance-field
                             fieldid="years"
                             label="Years"
-                            @value-changed="onValueChange">
+                            @value-changed="onValueChange"
+                        >
                         </finance-field>
                     </div>
                     <div class="tile is-parent">
                         <finance-field
                             fieldid="yearsToCome"
                             label="Years to come"
-                            @value-changed="onValueChange">
+                            @value-changed="onValueChange"
+                        >
                         </finance-field>
                     </div>
                 </div>

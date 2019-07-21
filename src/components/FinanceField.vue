@@ -10,7 +10,8 @@
                     :name="fieldid"
                     required
                     v-model.number="value"
-                    @change="onValueChange" />
+                    @change="onValueChange"
+               />
             </div>
         </div>
     </div>

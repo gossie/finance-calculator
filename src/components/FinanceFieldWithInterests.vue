@@ -10,7 +10,8 @@
                     :name="fieldid"
                     required
                     v-model.number="value"
-                    @change="onValueChange" />
+                    @change="onValueChange"
+               />
                 <input
                     id="interests"
                     type="text"
@@ -19,7 +20,8 @@
                     required
                     v-model.number="interests"
                     placeholder="Interests"
-                    @change="onInterestsChange" />
+                    @change="onInterestsChange"
+               />
             </div>
         </div>
     </div>
@@ -34,7 +36,7 @@ export default {
         defaultinterests: Number
     },
     data: function() {
-        this.$emit('interests-changed', {
+        this.$emit("interests-changed", {
             fieldId: this.fieldid,
             value: this.defaultinterests
         });
