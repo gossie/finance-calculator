@@ -65,7 +65,12 @@
                         <div class="tile is-child">
                             <div class="field is-grouped">
                                 <div class="control">
-                                    <input type="submit" class="button is-link" value="Calculate" />
+                                    <input
+                                        type="submit"
+                                        class="button
+                                        is-link"
+                                        value="Calculate"
+                                    />
                                 </div>
                                 <!-- <div class="control">
                                     <button @click="clear" class="button is-text">Clear</button>
@@ -82,12 +87,20 @@
                                 <thead>
                                     <tr>
                                         <th>Year</th>
-                                        <th>Save part of the fortune without interests</th>
-                                        <th>Risky part of the fortune without interests</th>
+                                        <th>
+                                            Save part of the fortune without interests
+                                        </th>
+                                        <th>
+                                            Risky part of the fortune without interests
+                                        </th>
                                         <th>Total fortune without interests</th>
                                         <th>Interests</th>
-                                        <th>save part of the fortune with interests</th>
-                                        <th>Risky part of the fortune with interests</th>
+                                        <th>
+                                            Save part of the fortune with interests
+                                        </th>
+                                        <th>
+                                            Risky part of the fortune with interests
+                                        </th>
                                         <th>Total fortune</th>
                                     </tr>
                                 </thead>
@@ -98,8 +111,12 @@
                                         <td>{{ resultYear.sumRisk }}</td>
                                         <td>{{ resultYear.sum }}</td>
                                         <td>{{ resultYear.interest }}</td>
-                                        <td>{{ resultYear.sumSaveWithInterest }}</td>
-                                        <td>{{ resultYear.sumRiskWithInterest }}</td>
+                                        <td>
+                                            {{ resultYear.sumSaveWithInterest }}
+                                        </td>
+                                        <td>
+                                            {{ resultYear.sumRiskWithInterest }}
+                                        </td>
                                         <td>{{ resultYear.result }}</td>
                                     </tr>
                                 </tbody>
@@ -109,7 +126,9 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><b>{{ totalInterests }}</b></td>
+                                        <td>
+                                            <b>{{ totalInterests }}</b>
+                                        </td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -120,7 +139,10 @@
                     </div>
                 </div>
 
-                <div class="tile is-parent" v-if="showResult && yearsToCome > 0">
+                <div
+                    class="tile is-parent"
+                    v-if="showResult && yearsToCome > 0"
+                >
                     <div class="tile is-parent">
                         <div class="tile is-child box table-container">
                             <p>Per year: {{ perYear }}</p>
@@ -169,7 +191,7 @@ export default {
             let sumSave = this.initialSave;
             let sumRisk = this.initialRisk;
 
-            for (let i=1; i<=this.years; i++) {
+            for (let i = 1; i <= this.years; i++) {
                 const interestSave = this.saveSavement * factorSave + sumSaveWithInterest * factorSave;
                 const interestRisk = this.riskSavement * factorRisk + sumRiskWithInterest * factorRisk;
 

@@ -11,7 +11,7 @@
                     required
                     v-model.number="value"
                     @change="onValueChange"
-               />
+                />
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@
                     required
                     v-model.number="value"
                     @change="onValueChange"
-               />
+                />
                 <input
                     id="interests"
                     type="text"
@@ -21,7 +21,7 @@
                     v-model.number="interests"
                     placeholder="Interests"
                     @change="onInterestsChange"
-               />
+                />
             </div>
         </div>
     </div>
