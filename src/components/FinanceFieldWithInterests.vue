@@ -27,7 +27,7 @@ export default {
         return {
             value: 0,
             interests: this.defaultinterests
-        }
+        };
     },
     methods: {
         onValueChange: function() {
