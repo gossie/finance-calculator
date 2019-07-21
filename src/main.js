@@ -1,7 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-import "../node_modules/bulma/css/bulma.min.css";
+
+require('./assets/sass/main.sass');
 
 Vue.config.productionTip = false;
 

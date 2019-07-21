@@ -1,158 +1,153 @@
 <template>
-    <div class="container">
-        <form @submit.prevent="calculate">
-            <div class="tile is-ancestor  is-vertical">
+    <form @submit.prevent="calculate">
+        <div class="tile is-ancestor  is-vertical">
+            <div class="tile is-parent">
                 <div class="tile is-parent">
-                    <div class="tile is-parent">
-                        <finance-field
-                            fieldid="initialSave"
-                            label="Initial fortune (Save)"
-                            @value-changed="onValueChange"
-                        >
-                        </finance-field>
-                    </div>
-                    <div class="tile is-parent">
-                        <finance-field
-                            fieldid="initialRisk"
-                            label="Initial fortune (Risk)"
-                            @value-changed="onValueChange"
-                        >
-                        </finance-field>
-                    </div>
+                    <finance-field
+                        fieldid="initialSave"
+                        label="Initial fortune (Save)"
+                        @value-changed="onValueChange"
+                    >
+                    </finance-field>
                 </div>
                 <div class="tile is-parent">
-                    <div class="tile is-parent">
-                        <finance-field-with-interests
-                            fieldid="saveSavement"
-                            label="Yearly savement (save)"
-                            defaultinterests="0.2"
-                            @value-changed="onValueChange"
-                            @interests-changed="onInterestsChange"
-                        >
-                        </finance-field-with-interests>
-                    </div>
-                    <div class="tile is-parent">
-                        <finance-field-with-interests
-                            fieldid="riskSavement"
-                            label="Yearly savement (Risk)"
-                            defaultinterests="5"
-                            @value-changed="onValueChange"
-                            @interests-changed="onInterestsChange"
-                        >
-                        </finance-field-with-interests>
-                    </div>
+                    <finance-field
+                        fieldid="initialRisk"
+                        label="Initial fortune (Risk)"
+                        @value-changed="onValueChange"
+                    >
+                    </finance-field>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-parent">
+                    <finance-field-with-interests
+                        fieldid="saveSavement"
+                        label="Yearly savement (save)"
+                        defaultinterests="0.2"
+                        @value-changed="onValueChange"
+                        @interests-changed="onInterestsChange"
+                    >
+                    </finance-field-with-interests>
                 </div>
                 <div class="tile is-parent">
-                    <div class="tile is-parent">
-                        <finance-field
-                            fieldid="years"
-                            label="Years"
-                            @value-changed="onValueChange"
-                        >
-                        </finance-field>
-                    </div>
-                    <div class="tile is-parent">
-                        <finance-field
-                            fieldid="yearsToCome"
-                            label="Years to come"
-                            @value-changed="onValueChange"
-                        >
-                        </finance-field>
-                    </div>
+                    <finance-field-with-interests
+                        fieldid="riskSavement"
+                        label="Yearly savement (Risk)"
+                        defaultinterests="5"
+                        @value-changed="onValueChange"
+                        @interests-changed="onInterestsChange"
+                    >
+                    </finance-field-with-interests>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-parent">
+                    <finance-field
+                        fieldid="years"
+                        label="Years"
+                        @value-changed="onValueChange"
+                    >
+                    </finance-field>
                 </div>
                 <div class="tile is-parent">
-                    <div class="tile is-parent">
-                        <div class="tile is-child">
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <input
-                                        type="submit"
-                                        class="button
-                                        is-link"
-                                        value="Calculate"
-                                    />
-                                </div>
-                                <!-- <div class="control">
-                                    <button @click="clear" class="button is-text">Clear</button>
-                                </div> -->
+                    <finance-field
+                        fieldid="yearsToCome"
+                        label="Years to come"
+                        @value-changed="onValueChange"
+                    >
+                    </finance-field>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-parent">
+                    <div class="tile is-child">
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <input
+                                    type="submit"
+                                    class="button
+                                    is-link"
+                                    value="Calculate"
+                                />
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tile is-parent" v-if="showResult">
-                    <div class="tile is-parent">
-                        <div class="tile is-child box table-container">
-                            <table class="table is-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Year</th>
-                                        <th>
-                                            Save part of the fortune without interests
-                                        </th>
-                                        <th>
-                                            Risky part of the fortune without interests
-                                        </th>
-                                        <th>Total fortune without interests</th>
-                                        <th>Interests</th>
-                                        <th>
-                                            Save part of the fortune with interests
-                                        </th>
-                                        <th>
-                                            Risky part of the fortune with interests
-                                        </th>
-                                        <th>Total fortune</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="resultYear in resultYears">
-                                        <td>{{ resultYear.number }}</td>
-                                        <td>{{ resultYear.sumSave }}</td>
-                                        <td>{{ resultYear.sumRisk }}</td>
-                                        <td>{{ resultYear.sum }}</td>
-                                        <td>{{ resultYear.interest }}</td>
-                                        <td>
-                                            {{ resultYear.sumSaveWithInterest }}
-                                        </td>
-                                        <td>
-                                            {{ resultYear.sumRiskWithInterest }}
-                                        </td>
-                                        <td>{{ resultYear.result }}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <b>{{ totalInterests }}</b>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class="tile is-parent"
-                    v-if="showResult && yearsToCome > 0"
-                >
-                    <div class="tile is-parent">
-                        <div class="tile is-child box table-container">
-                            <p>Per year: {{ perYear }}</p>
-                            <p>Per month: {{ perMonth }}</p>
+                            <!-- <div class="control">
+                                <button @click="clear" class="button is-text">Clear</button>
+                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+
+            <div class="tile is-parent" v-if="showResult">
+                <div class="tile is-parent">
+                    <div class="tile is-child box table-container">
+                        <table class="table is-striped">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>
+                                        Save part of the fortune without interests
+                                    </th>
+                                    <th>
+                                        Risky part of the fortune without interests
+                                    </th>
+                                    <th>Total fortune without interests</th>
+                                    <th>Interests</th>
+                                    <th>
+                                        Save part of the fortune with interests
+                                    </th>
+                                    <th>
+                                        Risky part of the fortune with interests
+                                    </th>
+                                    <th>Total fortune</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="resultYear in resultYears">
+                                    <td>{{ resultYear.number }}</td>
+                                    <td>{{ resultYear.sumSave }}</td>
+                                    <td>{{ resultYear.sumRisk }}</td>
+                                    <td>{{ resultYear.sum }}</td>
+                                    <td>{{ resultYear.interest }}</td>
+                                    <td>
+                                        {{ resultYear.sumSaveWithInterest }}
+                                    </td>
+                                    <td>
+                                        {{ resultYear.sumRiskWithInterest }}
+                                    </td>
+                                    <td>{{ resultYear.result }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <b>{{ totalInterests }}</b>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile is-parent" v-if="showResult && yearsToCome > 0">
+                <div class="tile is-parent">
+                    <div class="tile is-child box table-container">
+                        <p>Per year: {{ perYear }}</p>
+                        <p>Per month: {{ perMonth }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </template>
 
 <script>
@@ -205,17 +200,20 @@ export default {
 
                 const result = sumSaveWithInterest + sumRiskWithInterest;
 
+                const currency = { style: "currency", currency: "EUR" };
+                const locale = "de-DE";
+
                 resultYears.push({
                     number: i,
-                    sumSave: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSave * 100) / 100),
-                    sumRisk: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRisk * 100) / 100),
-                    sum: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt((sumSave + sumRisk) * 100) / 100),
+                    sumSave: new Intl.NumberFormat(locale, currency).format(parseInt(sumSave * 100) / 100),
+                    sumRisk: new Intl.NumberFormat(locale, currency).format(parseInt(sumRisk * 100) / 100),
+                    sum: new Intl.NumberFormat(locale, currency).format(parseInt((sumSave + sumRisk) * 100) / 100),
                     interestRaw: interest,
-                    interest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(interest * 100) / 100),
-                    sumSaveWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumSaveWithInterest * 100) / 100),
-                    sumRiskWithInterest: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sumRiskWithInterest * 100) / 100),
+                    interest: new Intl.NumberFormat(locale, currency).format(parseInt(interest * 100) / 100),
+                    sumSaveWithInterest: new Intl.NumberFormat(locale, currency).format(parseInt(sumSaveWithInterest * 100) / 100),
+                    sumRiskWithInterest: new Intl.NumberFormat(locale, currency).format(parseInt(sumRiskWithInterest * 100) / 100),
                     resultRaw: result,
-                    result: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(result * 100) / 100)
+                    result: new Intl.NumberFormat(locale, currency).format(parseInt(result * 100) / 100)
                 });
             }
             return resultYears;
