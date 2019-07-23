@@ -203,8 +203,8 @@ export default {
 
             let i = 1;
             while (i <= this.yearsToCome && (saveFortune + riskFortune) >= this.yearlyExpenses) {
-                saveFortune -= (this.yearlyExpenses / 2);
-                riskFortune -= (this.yearlyExpenses / 2);
+                saveFortune = Math.max(0, saveFortune - (this.yearlyExpenses / 2));
+                riskFortune = Math.max(0, riskFortune - (this.yearlyExpenses / 2));
 
                 const interestSave = saveFortune * factorSave;
                 const interestRisk = riskFortune * factorRisk;
