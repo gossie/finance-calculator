@@ -202,8 +202,8 @@ export default {
             let riskFortune = this.savementYears[this.savementYears.length-1].sumRiskWithInterest;
 
             for(let i = 1; i <= this.yearsToCome; i++) {
-                saveFortune -= (this.yearlyExpenses / 2);
-                riskFortune -= (this.yearlyExpenses / 2);
+                saveFortune = Math.max(0, saveFortune - (this.yearlyExpenses / 2));
+                riskFortune = Math.max(0, riskFortune - (this.yearlyExpenses / 2));;
 
                 const interestSave = saveFortune * factorSave;
                 const interestRisk = riskFortune * factorRisk;
