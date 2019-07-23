@@ -4,6 +4,8 @@
             <tr>
                 <th>Year</th>
                 <th>Interests</th>
+                <th>Save part of the fortune with interests</th>
+                <th>Risky part of the fortune with interests</th>
                 <th>Fortune</th>
             </tr>
         </thead>
@@ -11,6 +13,8 @@
             <tr v-for="resultYear in years">
                 <td>{{ resultYear.number }}</td>
                 <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.interests * 100) / 100) }}</td>
+                <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.saveFortune * 100) / 100) }}</td>
+                <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.riskFortune * 100) / 100) }}</td>
                 <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.fortune * 100) / 100) }}</td>
             </tr>
         </tbody>

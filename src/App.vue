@@ -201,7 +201,8 @@ export default {
             let saveFortune = this.savementYears[this.savementYears.length-1].sumSaveWithInterest;
             let riskFortune = this.savementYears[this.savementYears.length-1].sumRiskWithInterest;
 
-            for(let i = 1; i <= this.yearsToCome; i++) {
+            let i = 1;
+            while (i <= this.yearsToCome && (saveFortune + riskFortune) >= this.yearlyExpenses) {
                 saveFortune -= (this.yearlyExpenses / 2);
                 riskFortune -= (this.yearlyExpenses / 2);
 
@@ -214,8 +215,12 @@ export default {
                 retirementYears.push({
                     number: i,
                     interests: interestSave + interestRisk,
+                    saveFortune,
+                    riskFortune,
                     fortune: saveFortune + riskFortune + interestSave + interestRisk
                 });
+
+                i++;
             }
 
             return retirementYears;
