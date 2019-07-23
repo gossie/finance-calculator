@@ -24,7 +24,7 @@
                     <finance-field-with-interests
                         fieldid="saveSavement"
                         label="Yearly savement (save)"
-                        defaultinterests="0.2"
+                        :defaultinterests="0.2"
                         @value-changed="onValueChange"
                         @interests-changed="onInterestsChange"
                     >
@@ -34,7 +34,7 @@
                     <finance-field-with-interests
                         fieldid="riskSavement"
                         label="Yearly savement (Risk)"
-                        defaultinterests="5"
+                        :defaultinterests="5"
                         @value-changed="onValueChange"
                         @interests-changed="onInterestsChange"
                     >
@@ -46,6 +46,17 @@
                     <finance-field
                         fieldid="years"
                         label="Years"
+                        @value-changed="onValueChange"
+                    >
+                    </finance-field>
+                </div>
+                <div class="tile is-parent" />
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-parent">
+                    <finance-field
+                        fieldid="yearlyExpenses"
+                        label="Yearly expenses"
                         @value-changed="onValueChange"
                     >
                     </finance-field>
@@ -82,58 +93,8 @@
             <div class="tile is-parent" v-if="showResult">
                 <div class="tile is-parent">
                     <div class="tile is-child box table-container">
-                        <table class="table is-striped">
-                            <thead>
-                                <tr>
-                                    <th>Year</th>
-                                    <th>
-                                        Save part of the fortune without interests
-                                    </th>
-                                    <th>
-                                        Risky part of the fortune without interests
-                                    </th>
-                                    <th>Total fortune without interests</th>
-                                    <th>Interests</th>
-                                    <th>
-                                        Save part of the fortune with interests
-                                    </th>
-                                    <th>
-                                        Risky part of the fortune with interests
-                                    </th>
-                                    <th>Total fortune</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="resultYear in resultYears">
-                                    <td>{{ resultYear.number }}</td>
-                                    <td>{{ resultYear.sumSave }}</td>
-                                    <td>{{ resultYear.sumRisk }}</td>
-                                    <td>{{ resultYear.sum }}</td>
-                                    <td>{{ resultYear.interest }}</td>
-                                    <td>
-                                        {{ resultYear.sumSaveWithInterest }}
-                                    </td>
-                                    <td>
-                                        {{ resultYear.sumRiskWithInterest }}
-                                    </td>
-                                    <td>{{ resultYear.result }}</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>{{ totalInterests }}</b>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <savement-table :years="savementYears">
+                        </savement-table>
                     </div>
                 </div>
             </div>
@@ -142,7 +103,9 @@
                 <div class="tile is-parent">
                     <div class="tile is-child box table-container">
                         <p>Per year: {{ perYear }}</p>
-                        <p>Per month: {{ perMonth }}</p>
+                        <p>Per year: {{ perMonth }}</p>
+                        <retirement-table :years="retirementYears">
+                        </retirement-table>
                     </div>
                 </div>
             </div>
@@ -153,12 +116,16 @@
 <script>
 import FinanceField from "./components/FinanceField.vue";
 import FinanceFieldWithInterests from "./components/FinanceFieldWithInterests.vue";
+import SavementTable from "./components/SavementTable.vue";
+import RetirementTable from "./components/RetirementTable.vue";
 
 export default {
     name: "app",
     components: {
         FinanceField,
-        FinanceFieldWithInterests
+        FinanceFieldWithInterests,
+        SavementTable,
+        RetirementTable
     },
     data: function() {
         return {
@@ -170,11 +137,12 @@ export default {
             interestRisk: 0,
             saveSavement: 0,
             riskSavement: 0,
+            yearlyExpenses: 0,
             showResult: false
         };
     },
     computed: {
-        resultYears: function() {
+        savementYears: function() {
             const resultYears = [];
 
             const factorSave = this.interestSave / 100;
@@ -205,32 +173,52 @@ export default {
 
                 resultYears.push({
                     number: i,
-                    sumSave: new Intl.NumberFormat(locale, currency).format(parseInt(sumSave * 100) / 100),
-                    sumRisk: new Intl.NumberFormat(locale, currency).format(parseInt(sumRisk * 100) / 100),
-                    sum: new Intl.NumberFormat(locale, currency).format(parseInt((sumSave + sumRisk) * 100) / 100),
-                    interestRaw: interest,
-                    interest: new Intl.NumberFormat(locale, currency).format(parseInt(interest * 100) / 100),
-                    sumSaveWithInterest: new Intl.NumberFormat(locale, currency).format(parseInt(sumSaveWithInterest * 100) / 100),
-                    sumRiskWithInterest: new Intl.NumberFormat(locale, currency).format(parseInt(sumRiskWithInterest * 100) / 100),
-                    resultRaw: result,
-                    result: new Intl.NumberFormat(locale, currency).format(parseInt(result * 100) / 100)
+                    sumSave,
+                    sumRisk,
+                    sum: sumSave + sumRisk,
+                    interest,
+                    sumSaveWithInterest,
+                    sumRiskWithInterest,
+                    result
                 });
             }
             return resultYears;
         },
-        totalInterests: function() {
-            const sum = this.resultYears
-                .map(year => year.interestRaw)
-                .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(sum * 100) / 100);
-        },
         perYear: function() {
-            const value = this.resultYears[this.resultYears.length-1].resultRaw / this.yearsToCome;
+            const value = this.savementYears[this.savementYears.length-1].result / this.yearsToCome;
             return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(value * 100) / 100);
         },
         perMonth: function() {
-            const value = (this.resultYears[this.resultYears.length-1].resultRaw / this.yearsToCome) / 12;
+            const value = (this.savementYears[this.savementYears.length-1].result / this.yearsToCome) / 12;
             return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(value * 100) / 100);
+        },
+        retirementYears: function() {
+            const retirementYears = [];
+
+            const factorSave = this.interestSave / 100;
+            const factorRisk = this.interestRisk / 100;
+
+            let saveFortune = this.savementYears[this.savementYears.length-1].sumSaveWithInterest;
+            let riskFortune = this.savementYears[this.savementYears.length-1].sumRiskWithInterest;
+
+            for(let i = 1; i <= this.yearsToCome; i++) {
+                saveFortune -= (this.yearlyExpenses / 2);
+                riskFortune -= (this.yearlyExpenses / 2);
+
+                const interestSave = saveFortune * factorSave;
+                const interestRisk = riskFortune * factorRisk;
+
+                saveFortune += interestSave;
+                riskFortune += interestRisk;
+
+                retirementYears.push({
+                    number: i,
+                    interests: interestSave + interestRisk,
+                    fortune: saveFortune + riskFortune + interestSave + interestRisk
+                });
+            }
+
+            return retirementYears;
         }
     },
     methods: {
