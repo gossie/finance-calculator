@@ -119,6 +119,8 @@ import FinanceFieldWithInterests from "./components/FinanceFieldWithInterests.vu
 import SavementTable from "./components/SavementTable.vue";
 import RetirementTable from "./components/RetirementTable.vue";
 
+import RetirementFactory from "./services/RetirementFactory.js";
+
 export default {
     name: "app",
     components: {
@@ -168,9 +170,6 @@ export default {
 
                 const result = sumSaveWithInterest + sumRiskWithInterest;
 
-                const currency = { style: "currency", currency: "EUR" };
-                const locale = "de-DE";
-
                 resultYears.push({
                     number: i,
                     sumSave,
@@ -197,30 +196,18 @@ export default {
 
             const factorSave = this.interestSave / 100;
             const factorRisk = this.interestRisk / 100;
+            const saveFortune = this.savementYears[this.savementYears.length-1].sumSaveWithInterest;
+            const riskFortune = this.savementYears[this.savementYears.length-1].sumRiskWithInterest;
 
-            let saveFortune = this.savementYears[this.savementYears.length-1].sumSaveWithInterest;
-            let riskFortune = this.savementYears[this.savementYears.length-1].sumRiskWithInterest;
+            const retirementFactory = new RetirementFactory(this.yearlyExpenses, saveFortune, riskFortune, factorSave, factorRisk);
 
             let i = 1;
-            while (i <= this.yearsToCome && (saveFortune + riskFortune) >= this.yearlyExpenses) {
-                saveFortune = Math.max(0, saveFortune - (this.yearlyExpenses / 2));
-                riskFortune = Math.max(0, riskFortune - (this.yearlyExpenses / 2));
-
-                const interestSave = saveFortune * factorSave;
-                const interestRisk = riskFortune * factorRisk;
-
-                saveFortune += interestSave;
-                riskFortune += interestRisk;
-
-                retirementYears.push({
-                    number: i,
-                    interests: interestSave + interestRisk,
-                    saveFortune,
-                    riskFortune,
-                    fortune: saveFortune + riskFortune + interestSave + interestRisk
-                });
-
-                i++;
+            let goOn = true
+            while (goOn) {
+                const lastYear = retirementFactory.createRetirementYear(i);
+                retirementYears.push(lastYear);
+                goOn = (lastYear.saveFortune + lastYear.riskFortune) >= this.yearlyExpenses
+                        && ++i <= this.yearsToCome;
             }
 
             return retirementYears;
