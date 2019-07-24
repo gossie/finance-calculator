@@ -103,7 +103,7 @@
                 <div class="tile is-parent">
                     <div class="tile is-child box table-container">
                         <p>Per year: {{ perYear }}</p>
-                        <p>Per year: {{ perMonth }}</p>
+                        <p>Per month: {{ perMonth }}</p>
                         <retirement-table :years="retirementYears">
                         </retirement-table>
                     </div>
