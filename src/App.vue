@@ -116,7 +116,7 @@
 <script>
 import FinanceField from "./components/FinanceField.vue";
 import FinanceFieldWithInterests from "./components/FinanceFieldWithInterests.vue";
-import SavementTable from "./components/SavementTable.vue";
+// import SavementTable from "./components/SavementTable.vue";
 import RetirementTable from "./components/RetirementTable.vue";
 
 import RetirementFactory from "./services/RetirementFactory.js";
