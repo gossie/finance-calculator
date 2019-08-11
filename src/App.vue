@@ -56,7 +56,7 @@
                 <div class="tile is-parent">
                     <finance-field
                         fieldid="yearlyExpenses"
-                        label="Yearly expenses"
+                        label="Yearly expenses when retired"
                         @value-changed="onValueChange"
                     >
                     </finance-field>
@@ -64,7 +64,7 @@
                 <div class="tile is-parent">
                     <finance-field
                         fieldid="yearsToCome"
-                        label="Years to come"
+                        label="Retirement years to come"
                         @value-changed="onValueChange"
                     >
                     </finance-field>
