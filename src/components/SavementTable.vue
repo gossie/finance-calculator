@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="resultYear in years">
+            <tr v-for="resultYear in years" :key="resultYear.number">
                 <td>{{ resultYear.number }}</td>
                 <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.sumSave * 100) / 100) }}</td>
                 <td>{{ new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(parseInt(resultYear.sumRisk * 100) / 100) }}</td>
