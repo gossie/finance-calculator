@@ -9,7 +9,9 @@ function App() {
     const [interestSave, setInterestSave] = useState(0);
     const [interestRisk, setInterestRisk] = useState(0);
     const [years, setYears] = useState(0);
+    const [retirementYears, setRetirementYears] = useState(0);
 
+    const yearlySavings: Array<JSX.Element> = [];
     let save = initialFortuneSave;
     let risk = initialFortuneRisk;
     for (let i=0; i<years; i++) {
@@ -18,8 +20,14 @@ function App() {
 
         risk *= (1 + interestRisk / 100);
         risk += yearlyFortuneRisk;
+
+        yearlySavings.push(<tr key={i}><td>Year {i + 1}</td><td>{Math.round(save * 100) / 100} €</td><td>{Math.round(risk * 100) / 100} €</td><td>{Math.round((save + risk) * 100) / 100} €</td></tr>)
     }
-    const total = Math.round((save + risk) * 100) / 100;
+
+    const yearlySpendings: Array<JSX.Element> = [];
+    for (let i=0; i<retirementYears; i++) {
+        yearlySpendings.push(<tr key={i}></tr>)
+    }
 
     return (
         <div>
@@ -33,7 +41,23 @@ function App() {
                 <FinanceInput id='years' label='Years' value={years} onChange={setYears} />
             </div>
             <div>
-                <div>{total} €</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th />
+                            <th>Save</th>
+                            <th>Risk</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    {yearlySavings}
+                </table>
+            </div>
+            <div>
+                <FinanceInput id='retirement-years' label='Retirement years' value={retirementYears} onChange={setRetirementYears} />
+            </div>
+            <div>
+
             </div>
         </div>
     )
