@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://www.andreschreck.de/finance-calculator",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
